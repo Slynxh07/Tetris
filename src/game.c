@@ -2,8 +2,8 @@
 #include "game.h"
 #include "colors.h"
 
-#define HEIGHT 900
-#define WIDTH 600
+#define HEIGHT 620
+#define WIDTH 500
 
 void updateGame();
 void drawGame();
@@ -11,6 +11,7 @@ void drawGame();
 void initGame()
 {
     InitWindow(WIDTH, HEIGHT, "Teris");
+    SetTargetFPS(60);
 }
 
 void runGame()
@@ -37,6 +38,11 @@ void drawGame()
     BeginDrawing();
 
     ClearBackground(backGround);
+
+    DrawRectangleRounded((Rectangle){ 320, 55, 170, 60 }, 0.3, 6, lightBlue);
+
+    DrawRectangleRounded((Rectangle){ 320, 165, 170, 180 }, 0.3, 6, lightBlue);
+    DrawRectangleRounded((Rectangle){ 320, 385, 170, 180 }, 0.3, 6, lightBlue);
 
     EndDrawing();
 }

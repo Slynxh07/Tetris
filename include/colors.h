@@ -8,3 +8,4 @@ const Color bYellow = { 237, 195, 118, 255};
 const Color bOrange = { 229, 121, 53, 255};
 const Color bDarkBlue = { 88, 110, 182, 255};
 const Color bBlue = { 128, 219, 220, 255};
+const Color lightBlue = { 59, 85, 162, 255 };

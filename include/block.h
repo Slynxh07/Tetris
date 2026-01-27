@@ -2,13 +2,23 @@
 #define BLOCK_H
 
 typedef struct Block Block;
-typedef struct Cell
+
+typedef enum BLOCK_TYPE {
+    ORANGE_RICKY = 0,
+    BLUE_RICKY,
+    CLEVELAND_Z,
+    RHODE_ISLAND_Z,
+    HERO,
+    TEEWEE,
+    SMASHBOY
+} BLOCK_TYPE;
+
+typedef struct Posistion
 {
-    int filled;
-} Cell;
+    int x, y;
+} Posistion;
 
-
-Block *createBlock();
+Block *createBlock(BLOCK_TYPE blockType);
 void destroyBlock(Block *b);
 
 #endif
