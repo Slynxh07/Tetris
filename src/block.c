@@ -14,6 +14,7 @@ Block *createBlock(BLOCK_TYPE blockType)
     switch (blockType)
     {
     case ORANGE_RICKY:
+        cells[0] = { 0, 0 };
         break;
     case BLUE_RICKY:
         break;
@@ -38,4 +39,19 @@ Block *createBlock(BLOCK_TYPE blockType)
 void destroyBlock(Block *b)
 {
     free(b);
+}
+
+rotate(Block *b)
+{
+
+}
+
+move(Block *b, Direction dir)
+{
+
+}  
+
+checkValidMove(Block *b, Direction dir)
+{
+
 }

@@ -15,6 +15,13 @@ typedef enum BLOCK_TYPE {
     SMASHBOY
 } BLOCK_TYPE;
 
+typedef enum Direction {
+    UP,
+    DOWN,
+    RIGHT,
+    LEFT
+} Direction;
+
 typedef struct Posistion
 {
     int x, y;
@@ -22,5 +29,8 @@ typedef struct Posistion
 
 Block *createBlock(BLOCK_TYPE blockType);
 void destroyBlock(Block *b);
+rotate(Block *b);
+move(Block *b, Direction dir);
+checkValidMove(Block *b, Direction dir);
 
 #endif
