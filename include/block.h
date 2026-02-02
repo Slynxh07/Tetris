@@ -6,7 +6,7 @@
 typedef struct Block Block;
 
 typedef enum BLOCK_TYPE {
-    ORANGE_RICKY = 0,
+    ORANGE_RICKY = 1,
     BLUE_RICKY,
     CLEVELAND_Z,
     RHODE_ISLAND_Z,
@@ -29,8 +29,9 @@ typedef struct Posistion
 
 Block *createBlock(BLOCK_TYPE blockType);
 void destroyBlock(Block *b);
-rotate(Block *b);
-move(Block *b, Direction dir);
-checkValidMove(Block *b, Direction dir);
+BLOCK_TYPE getBlockType(Block *b);
+void rotate(Block *b);
+void move(Block *b, Direction dir);
+void checkValidMove(Block *b, Direction dir);
 
 #endif

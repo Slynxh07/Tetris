@@ -11,7 +11,7 @@ typedef struct Grid
 
 Grid *createGrid();
 void destroyGrid(Grid *g);
-int isCellEmpty(int row, int col);
-int isCellOutside(int row, int col);
+int isCellEmpty(Grid *g, int row, int col);
+int isCellOutside(Grid *g, int row, int col);
 
 #endif

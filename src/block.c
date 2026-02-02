@@ -14,19 +14,46 @@ Block *createBlock(BLOCK_TYPE blockType)
     switch (blockType)
     {
     case ORANGE_RICKY:
-        cells[0] = { 0, 0 };
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case BLUE_RICKY:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case CLEVELAND_Z:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case RHODE_ISLAND_Z:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case HERO:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case TEEWEE:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     case SMASHBOY:
+        b->cells[0] = (Posistion){ 0, 0 };
+        b->cells[1] = (Posistion){ 0, 0 };
+        b->cells[2] = (Posistion){ 0, 0 };
+        b->cells[3] = (Posistion){ 0, 0 };
         break;
     default:
         printf("Error creating block...");
@@ -36,22 +63,27 @@ Block *createBlock(BLOCK_TYPE blockType)
     return b;
 }
 
+BLOCK_TYPE getBlockType(Block *b)
+{
+    return b->blockType;
+}
+
 void destroyBlock(Block *b)
 {
     free(b);
 }
 
-rotate(Block *b)
+void rotate(Block *b)
 {
 
 }
 
-move(Block *b, Direction dir)
+void move(Block *b, Direction dir)
 {
 
 }  
 
-checkValidMove(Block *b, Direction dir)
+void checkValidMove(Block *b, Direction dir)
 {
 
 }
