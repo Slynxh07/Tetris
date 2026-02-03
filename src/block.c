@@ -5,6 +5,9 @@
 typedef struct Block {
     Posistion cells[4];
     BLOCK_TYPE blockType;
+    int rowOffset;
+    int colOffset;
+    int rotateState;
 } Block;
 
 Block *createBlock(BLOCK_TYPE blockType)
@@ -60,6 +63,9 @@ Block *createBlock(BLOCK_TYPE blockType)
         exit(-1);
         break;
     }
+    b->colOffset = 0;
+    b->rowOffset = 0;
+    b->rotateState = 0;
     return b;
 }
 
@@ -75,15 +81,51 @@ void destroyBlock(Block *b)
 
 void rotate(Block *b)
 {
-
+    b->rotateState++;
+    if (b->rotateState >= 4) b->rotateState = 0;
 }
 
 void move(Block *b, Direction dir)
 {
-
+    switch (dir)
+    {
+        case DOWN:
+            b->rowOffset++;
+            break;
+        case LEFT:
+            b->colOffset--;
+            break;
+        case RIGHT:
+            b->colOffset++;
+            break;
+        default:
+            printf("Invlaid input, don't know how you got here...");
+            exit(-1);
+            break;
+    }
 }  
 
-void checkValidMove(Block *b, Direction dir)
+int checkValidMove(Block *b, Direction dir, Grid *g)
 {
+    switch (dir)
+    {
+        case DOWN:
+            if (!isCellEmpty(g, b->rowOffset + 1, b->colOffset)) return 0;
+            break;
+        case LEFT:
+            if (!isCellEmpty(g, b->rowOffset, b->colOffset - 1)) return 0;
+            break;
+        case RIGHT:
+            if (!isCellEmpty(g, b->rowOffset, b->colOffset + 1)) return 0;
+            break;
+    }
+    return 1;
+}
 
+void lockBlock(Block *b, Grid *g)
+{
+    if (setCellValue(g, b->rowOffset, b->colOffset, b->blockType))
+    {
+        return;
+    }
 }

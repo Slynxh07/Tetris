@@ -13,5 +13,6 @@ Grid *createGrid();
 void destroyGrid(Grid *g);
 int isCellEmpty(Grid *g, int row, int col);
 int isCellOutside(Grid *g, int row, int col);
+int setCellValue(Grid *g, int row, int col, BLOCK_TYPE val);
 
 #endif

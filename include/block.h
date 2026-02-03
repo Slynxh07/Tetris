@@ -1,6 +1,8 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include "grid.h"
+
 #define SWAP_BLOCK_PTR(a, b) do { Block *tmp = (a); (a) = (b); (b) = tmp; } while (0)
 
 typedef struct Block Block;
@@ -32,6 +34,7 @@ void destroyBlock(Block *b);
 BLOCK_TYPE getBlockType(Block *b);
 void rotate(Block *b);
 void move(Block *b, Direction dir);
-void checkValidMove(Block *b, Direction dir);
+int checkValidMove(Block *b, Direction dir, Grid *g);
+void lockBlock(Block *b, Grid *g);
 
 #endif

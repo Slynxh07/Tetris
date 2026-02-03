@@ -13,6 +13,8 @@ Block *currentBlock;
 Block *nextBlock;
 Block *holdBlock;
 
+Grid *grid;
+
 int keyPressed;
 
 Block *bag[BAG_SIZE];
@@ -31,6 +33,7 @@ void initGame()
     initBlocks();
     currentBlock = getNextBlock();
     nextBlock = getNextBlock();
+    grid = createGrid();
 }
 
 void runGame()
@@ -56,19 +59,23 @@ void updateGame()
             rotate(currentBlock);
             break;
         case KEY_DOWN:
-            if (checkValidMove(currentBlock, DOWN))
+            if (checkValidMove(currentBlock, DOWN, grid))
             {
                 move(currentBlock, DOWN);  
             }
+            else 
+            {
+                lockBlock(currentBlock, grid);
+            }
             break;
         case KEY_RIGHT:
-            if (checkValidMove(currentBlock, RIGHT))
+            if (checkValidMove(currentBlock, RIGHT, grid))
             {
                 move(currentBlock, RIGHT);
             }
             break;
         case KEY_LEFT:
-            if (checkValidMove(currentBlock, LEFT))
+            if (checkValidMove(currentBlock, LEFT, grid))
             {
                 move(currentBlock, LEFT);   
             }
