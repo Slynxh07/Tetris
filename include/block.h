@@ -10,11 +10,11 @@ typedef struct Block Block;
 typedef enum BLOCK_TYPE {
     ORANGE_RICKY = 1,
     BLUE_RICKY,
-    CLEVELAND_Z,
-    RHODE_ISLAND_Z,
     HERO,
+    SMASHBOY,
+    RHODE_ISLAND_Z,
     TEEWEE,
-    SMASHBOY
+    CLEVELAND_Z
 } BLOCK_TYPE;
 
 typedef enum Direction {

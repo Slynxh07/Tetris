@@ -32,6 +32,7 @@ void initGame()
     SetTargetFPS(60);
     srand(time(NULL));
     initBlocks();
+    shuffle();
     currentBlock = getNextBlock();
     nextBlock = getNextBlock();
     grid = createGrid();

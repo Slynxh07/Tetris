@@ -15,45 +15,45 @@ static const Position ORANGE_RICKY_CELLS[NUM_CELLS][NUM_CELLS] = {
 };
 
 static const Position BLUE_RICKY_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {0,0}, {1,0}, {1,1}, {1,2} },
+    { {0,1}, {0,2}, {1,1}, {2,1} },
+    { {1,0}, {1,1}, {1,2}, {2,2} },
+    { {0,1}, {1,1}, {2,0}, {2,1} }
 };
 
 static const Position CLEVELAND_Z_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {0,0}, {0,1}, {1,1}, {1,2} },
+    { {0,2}, {1,1}, {1,2}, {2,1} },
+    { {1,0}, {1,1}, {2,1}, {2,2} },
+    { {0,1}, {1,0}, {1,1}, {2,0} }
 };
 
 static const Position RHODE_ISLAND_Z_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {0,1}, {0,2}, {1,0}, {1,1} },
+    { {0,1}, {1,1}, {1,2}, {2,2} },
+    { {1,1}, {1,2}, {2,0}, {2,1} },
+    { {0,0}, {1,0}, {1,1}, {2,1} }
 };
 
 static const Position HERO_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {1,0}, {1,1}, {1,2}, {1,3} },
+    { {0,2}, {1,2}, {2,2}, {3,2} },
+    { {2,0}, {2,1}, {2,2}, {2,3} },
+    { {0,1}, {1,1}, {2,1}, {3,1} }
 };
 
 static const Position TEEWEE_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {0,1}, {1,0}, {1,1}, {1,2} },
+    { {0,1}, {1,1}, {1,2}, {2,1} },
+    { {1,0}, {1,1}, {1,2}, {2,1} },
+    { {0,1}, {1,0}, {1,1}, {2,1} }
 };
 
 static const Position SMASHBOY_CELLS[NUM_CELLS][NUM_CELLS] = {
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,1}, {2,1}, {2,2} },
-    { {1,0}, {1,1}, {1,2}, {2,0} },
-    { {0,0}, {0,1}, {1,1}, {2,1} }
+    { {0,0}, {0,1}, {1,0}, {1,1} },
+    { {0,0}, {0,1}, {1,0}, {1,1} },
+    { {0,0}, {0,1}, {1,0}, {1,1} },
+    { {0,0}, {0,1}, {1,0}, {1,1} }
 };
 
 typedef struct Block {
@@ -74,32 +74,44 @@ Block *createBlock(BLOCK_TYPE blockType)
     {
     case ORANGE_RICKY:
         memcpy(b->cells, ORANGE_RICKY_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = 0;
         break;
     case BLUE_RICKY:
         memcpy(b->cells, BLUE_RICKY_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = 0;
         break;
     case CLEVELAND_Z:
         memcpy(b->cells, CLEVELAND_Z_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = 0;
         break;
     case RHODE_ISLAND_Z:
         memcpy(b->cells, RHODE_ISLAND_Z_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = 0;
         break;
     case HERO:
         memcpy(b->cells, HERO_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = -1;
         break;
     case TEEWEE:
         memcpy(b->cells, TEEWEE_CELLS, sizeof(b->cells));
+        b->colOffset = 3;
+        b->rowOffset = 0;
         break;
     case SMASHBOY:
         memcpy(b->cells, SMASHBOY_CELLS, sizeof(b->cells));
+        b->colOffset = 4;
+        b->rowOffset = 0;
         break;
     default:
         printf("Error creating block...");
         exit(-1);
         break;
     }
-    b->colOffset = 0;
-    b->rowOffset = 0;
     b->rotateState = 0;
     return b;
 }
