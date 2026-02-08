@@ -197,6 +197,11 @@ int checkValidMove(const Block *b, const Direction dir, const Grid *g)
                 if (isCellOutside(newPos[i].row, newPos[i].col + 1) || !isCellEmpty(g, newPos[i].row, newPos[i].col + 1)) return 0;
             }
             break;
+        default:
+            for (int i = 0; i < 4; i++)
+            {
+                if(isCellOutside(newPos[i].row, newPos[i].col) || !isCellEmpty(g, newPos[i].row, newPos[i].col)) return 0;
+            }
     }
     return 1;
 }
@@ -226,5 +231,25 @@ void lockBlock(const Block *b, Grid *g)
     for (int i = 0; i < 4; i++)
     {
         setCellValue(g, newPos[i].row, newPos[i].col, b->blockType);
+    }
+}
+
+void resetBlock(Block *b)
+{
+    b->rotateState = 0;
+    switch (b->blockType)
+    {
+        case HERO:
+            b->colOffset = 3;
+            b->rowOffset = -1;
+            break;
+        case SMASHBOY:
+            b->colOffset = 4;
+            b->rowOffset = 0;
+            break;
+        default:
+            b->colOffset = 3;
+            b->rowOffset = 0;
+            break;
     }
 }

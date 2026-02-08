@@ -24,6 +24,14 @@ endif()
 file(GLOB SRC_FILES "${SRC_DIR}/*.c")
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/Assets
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets
+)
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} raylib)

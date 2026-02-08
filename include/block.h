@@ -18,7 +18,7 @@ typedef enum BLOCK_TYPE {
 } BLOCK_TYPE;
 
 typedef enum Direction {
-    DOWN,
+    DOWN = 1,
     RIGHT,
     LEFT
 } Direction;
@@ -37,5 +37,6 @@ void move(Block *b, Direction dir);
 int checkValidMove(const Block *b, const Direction dir, const Grid *g);
 void lockBlock(const Block *b, Grid *g);
 void drawBlock(const Block *b, int xOffset, int yOffset);
+void resetBlock(Block *b);
 
 #endif
