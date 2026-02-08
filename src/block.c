@@ -123,7 +123,7 @@ BLOCK_TYPE getBlockType(const Block *b)
 
 void destroyBlock(Block *b)
 {
-    free(b);
+    if (b != NULL) free(b);
 }
 
 void rotate(Block *b)
@@ -152,6 +152,19 @@ void move(Block *b, Direction dir)
     }
 }
 
+void hardDrop(Block *b, Grid *g)
+{
+    while (checkValidMove(b, DOWN, g))
+    {
+        move(b, DOWN);
+    }
+}
+
+void resetGhostBlockRow(Block *targetB, Block *fromB)
+{
+    targetB->rowOffset = fromB->rowOffset;
+}
+
 void drawBlock(const Block *b, int xOffset, int yOffset)
 {
     Position newPos[NUM_CELLS];
@@ -161,6 +174,17 @@ void drawBlock(const Block *b, int xOffset, int yOffset)
         DrawRectangle(newPos[i].col * CELL_SIZE + xOffset, newPos[i].row * CELL_SIZE + yOffset, CELL_SIZE - 1, CELL_SIZE - 1, brickColors[b->blockType]);
     }
 }
+
+void drawGhostBlock(const Block *b, int xOffset, int yOffset)
+{
+    Position newPos[NUM_CELLS];
+    getCellPositions(b, newPos);
+    for (int i = 0; i < NUM_CELLS; i++)
+    {
+        DrawRectangle(newPos[i].col * CELL_SIZE + xOffset, newPos[i].row * CELL_SIZE + yOffset, CELL_SIZE - 1, CELL_SIZE - 1, ghostBrickColors[b->blockType - 1]);
+    }
+}
+
 
 void getCellPositions(const Block *b, Position out[NUM_CELLS])
 {

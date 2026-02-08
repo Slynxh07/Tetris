@@ -14,6 +14,15 @@ extern const Color bBlue;
 extern const Color lightBlue;
 extern const Color gridColor;
 
+extern const Color gbRed;
+extern const Color gbGreen;
+extern const Color gbPurple;
+extern const Color gbYellow;
+extern const Color gbOrange;
+extern const Color gbDarkBlue;
+extern const Color gbBlue;
+
 extern Color brickColors[8];
+extern Color ghostBrickColors[7];
 
 #endif

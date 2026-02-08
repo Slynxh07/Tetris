@@ -21,7 +21,7 @@ Grid *createGrid()
 
 void destroyGrid(Grid *g)
 {
-    free(g);
+    if (g != NULL) free(g);
 }
 
 void drawTGrid(const Grid *g)

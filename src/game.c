@@ -14,6 +14,7 @@
 Block *currentBlock;
 Block *nextBlock;
 Block *holdBlock;
+Block *ghostBlock;
 
 Grid *grid;
 
@@ -25,7 +26,7 @@ int score;
 int gameOver;
 Font font;
 
-Block *bag[BAG_SIZE];
+BLOCK_TYPE bag[BAG_SIZE];
 
 void updateGame();
 void drawGame();
@@ -36,6 +37,7 @@ void endMove();
 void updateScore(int linesCleared, int moveDownPoints);
 Block *getNextBlock();
 void resetGame();
+void changeGhostBlock(BLOCK_TYPE t);
 
 int eventTriggered(double interval)
 {
@@ -58,6 +60,7 @@ void initGame()
     shuffle();
     currentBlock = getNextBlock();
     nextBlock = getNextBlock();
+    ghostBlock = createBlock(getBlockType(currentBlock));
     holdBlock = NULL;
     grid = createGrid();
     score = 0;
@@ -77,24 +80,24 @@ void runGame()
 
 void closeGame()
 {
-    for (int i = 0; i < BAG_SIZE; i++)
-    {
-        destroyBlock(bag[i]);
-    }
     destroyBlock(holdBlock);
     destroyBlock(nextBlock);
     destroyBlock(currentBlock);
+    destroyBlock(ghostBlock);
     destroyGrid(grid);
+    UnloadFont(font);
+    CloseWindow();
 }
 
 void updateGame()
 {
     keyPressed = GetKeyPressed();
+    resetGhostBlockRow(ghostBlock, currentBlock);
 
     if (!gameOver)
     {
 
-        if (eventTriggered(1))
+        if (eventTriggered(0.4))
         {
             if (checkValidMove(currentBlock, DOWN, grid))
             {
@@ -112,6 +115,7 @@ void updateGame()
                 if(checkValidRotation(currentBlock, grid))
                 {
                     rotate(currentBlock);
+                    rotate(ghostBlock);
                 }
                 break;
             case KEY_DOWN:
@@ -129,18 +133,26 @@ void updateGame()
                 if (checkValidMove(currentBlock, RIGHT, grid))
                 {
                     move(currentBlock, RIGHT);
+                    move(ghostBlock, RIGHT);
                 }
                 break;
             case KEY_LEFT:
                 if (checkValidMove(currentBlock, LEFT, grid))
                 {
-                    move(currentBlock, LEFT);   
+                    move(currentBlock, LEFT);
+                    move(ghostBlock, LEFT);
                 }
                 break; 
             case KEY_SPACE:
+                hardDrop(currentBlock, grid);
+                endMove();
+                break;
+            case KEY_C:
                 if(canHold) hold();
                 break;
         }
+
+        hardDrop(ghostBlock, grid);
     }
     else 
     {
@@ -179,6 +191,7 @@ void drawGame()
 
     drawTGrid(grid);
     drawBlock(currentBlock, 11, 11);
+    drawGhostBlock(ghostBlock, 11, 11);
 
     switch (getBlockType(nextBlock))
 	{
@@ -215,7 +228,7 @@ void initBlocks()
 {
     for (int i = 0; i < BAG_SIZE; i++)
     {
-        bag[i] = createBlock((BLOCK_TYPE)(i + 1));
+        bag[i] = (BLOCK_TYPE)(i + 1);
     }
 }
 
@@ -224,7 +237,9 @@ void shuffle()
     for (int i = BAG_SIZE - 1; i > 0; i--) 
     {
         int j = rand() % (i + 1);
-        SWAP_BLOCK_PTR(bag[i], bag[j]);
+        BLOCK_TYPE temp = bag[i];
+        bag[i] = bag[j];
+        bag[j] = temp;
     }
 }
 
@@ -242,18 +257,18 @@ void hold()
         currentBlock = nextBlock;
         nextBlock = getNextBlock();
     }
+    changeGhostBlock(getBlockType(currentBlock));
     holding = 1;
 }
 
 Block *getNextBlock()
 {
-    Block *retBlock;
     for (int i = 0; i < BAG_SIZE; i++)
     {
-        if (bag[i] == NULL) continue;
-        retBlock = bag[i]; 
-        bag[i] = NULL;   
-        return retBlock;
+        if (bag[i] == 0) continue;
+        BLOCK_TYPE t = bag[i];
+        bag[i] = 0;
+        return createBlock(t);
     }
     initBlocks();
     shuffle();
@@ -265,6 +280,7 @@ void endMove()
     lockBlock(currentBlock, grid);
     destroyBlock(currentBlock);
     currentBlock = nextBlock;
+    changeGhostBlock(getBlockType(currentBlock));
     if (!checkValidMove(currentBlock, 0, grid))
     {
         gameOver = 1;
@@ -277,32 +293,35 @@ void endMove()
 
 void updateScore(int linesCleared, int moveDownPoints)
 {
-	switch (linesCleared)
-	{
-	case 1:
-		score += 100;
-		break;
-	case 2:
-		score += 300;
-		break;
-	case 3:
-		score += 500;
-		break;
-	case 4:
-		score += 1000;
-		break;
-	default:
-		break;
-	}
-	score += moveDownPoints;
+    switch (linesCleared)
+    {
+        case 1:
+            score += 100;
+            break;
+        case 2:
+            score += 300;
+            break;
+        case 3:
+            score += 500;
+            break;
+        case 4:
+            score += 1000;
+            break;
+    }
+    score += moveDownPoints;
 }
 
 void resetGame()
 {
-    closeGame();
+    destroyBlock(holdBlock);
+    destroyBlock(nextBlock);
+    destroyBlock(ghostBlock);
+    destroyBlock(currentBlock);
+    destroyGrid(grid);
     initBlocks();
     shuffle();
     currentBlock = getNextBlock();
+    ghostBlock = createBlock(getBlockType(currentBlock));
     nextBlock = getNextBlock();
     holdBlock = NULL;
     grid = createGrid();
@@ -310,4 +329,10 @@ void resetGame()
     holding = 0;
     canHold = 1;
     gameOver = 0;
+}
+
+void changeGhostBlock(BLOCK_TYPE t)
+{
+    destroyBlock(ghostBlock);
+    ghostBlock = createBlock(t);
 }
