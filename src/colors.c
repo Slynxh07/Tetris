@@ -9,5 +9,6 @@ const Color bOrange = { 229, 121, 53, 255};
 const Color bDarkBlue = { 88, 110, 182, 255};
 const Color bBlue = { 128, 219, 220, 255};
 const Color lightBlue = { 59, 85, 162, 255 };
+const Color gridColor = { 48, 25, 52, 255 };
 
-Color brickColors[8] = {GRAY, bOrange, bDarkBlue, bRed, bGreen, bBlue, bPurple, bYellow};
+Color brickColors[8] = {gridColor, bOrange, bDarkBlue, bBlue, bYellow, bGreen, bPurple, bRed};

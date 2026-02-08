@@ -134,7 +134,6 @@ void rotate(Block *b)
 
 void move(Block *b, Direction dir)
 {
-    printf("Called");
     switch (dir)
     {
         case DOWN:
@@ -151,7 +150,6 @@ void move(Block *b, Direction dir)
             exit(-1);
             break;
     }
-    printf("rowOffset: %d, colOffset: %d\n", b->rowOffset, b->colOffset);
 }
 
 void drawBlock(const Block *b, int xOffset, int yOffset)
@@ -184,21 +182,39 @@ int checkValidMove(const Block *b, const Direction dir, const Grid *g)
         case DOWN:
             for (int i = 0; i < 4; i++)
             {
-                if (isCellOutside(g, newPos[i].row + 1, newPos[i].col) || !isCellEmpty(g, newPos[i].row + 1, newPos[i].col)) return 0;
+                if (isCellOutside(newPos[i].row + 1, newPos[i].col) || !isCellEmpty(g, newPos[i].row + 1, newPos[i].col)) return 0;
             }    
             break;
         case LEFT:
             for (int i = 0; i < 4; i++)
             {
-                if (isCellOutside(g, newPos[i].row, newPos[i].col - 1) || !isCellEmpty(g, newPos[i].row, newPos[i].col - 1)) return 0;
+                if (isCellOutside(newPos[i].row, newPos[i].col - 1) || !isCellEmpty(g, newPos[i].row, newPos[i].col - 1)) return 0;
             }
             break;
         case RIGHT:
             for (int i = 0; i < 4; i++)
             {
-                if (isCellOutside(g, newPos[i].row, newPos[i].col + 1) || !isCellEmpty(g, newPos[i].row, newPos[i].col + 1)) return 0;
+                if (isCellOutside(newPos[i].row, newPos[i].col + 1) || !isCellEmpty(g, newPos[i].row, newPos[i].col + 1)) return 0;
             }
             break;
+    }
+    return 1;
+}
+
+int checkValidRotation(const Block *b, const Grid *g)
+{
+    Position newPos[4];
+    for (int i = 0; i < NUM_CELLS; i++)
+    {
+        int newRotationState = b->rotateState < 3 ? b->rotateState + 1 : 0;
+        Position tile = b->cells[newRotationState][i];
+
+        newPos[i].row = tile.row + b->rowOffset;
+        newPos[i].col = tile.col + b->colOffset;
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        if (isCellOutside(newPos[i].row, newPos[i].col) || !isCellEmpty(g, newPos[i].row, newPos[i].col)) return 0;
     }
     return 1;
 }

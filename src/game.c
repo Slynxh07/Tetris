@@ -17,6 +17,7 @@ Block *holdBlock;
 Grid *grid;
 
 int keyPressed;
+double lastUpdateTime = 0;
 
 Block *bag[BAG_SIZE];
 
@@ -24,7 +25,19 @@ void updateGame();
 void drawGame();
 void initBlocks();
 void shuffle();
+void endMove();
 Block *getNextBlock();
+
+int eventTriggered(double interval)
+{
+	double currentTime = GetTime();
+	if (currentTime - lastUpdateTime >= interval)
+	{
+		lastUpdateTime = currentTime;
+		return 1;
+	}
+	return 0;
+}
 
 void initGame()
 {
@@ -49,16 +62,38 @@ void runGame()
 
 void closeGame()
 {
-    //free memory
+    for (int i = 0; i < BAG_SIZE; i++)
+    {
+        destroyBlock(bag[i]);
+    }
+    destroyBlock(holdBlock);
+    destroyBlock(nextBlock);
+    destroyBlock(currentBlock);
+    destroyGrid(grid);
 }
 
 void updateGame()
 {
+    if (eventTriggered(0.5))
+    {
+        if (checkValidMove(currentBlock, DOWN, grid))
+        {
+            move(currentBlock, DOWN);
+        }
+        else 
+        {
+            endMove();
+        }
+    }
+
     keyPressed = GetKeyPressed();
     switch (keyPressed)
     {
         case KEY_UP:
-            rotate(currentBlock);
+            if(checkValidRotation(currentBlock, grid))
+            {
+                rotate(currentBlock);
+            }
             break;
         case KEY_DOWN:
             if (checkValidMove(currentBlock, DOWN, grid))
@@ -67,7 +102,7 @@ void updateGame()
             }
             else 
             {
-                lockBlock(currentBlock, grid);
+                endMove();
             }
             break;
         case KEY_RIGHT:
@@ -96,6 +131,7 @@ void drawGame()
     DrawRectangleRounded((Rectangle){ 320, 165, 170, 180 }, 0.3, 6, lightBlue);
     DrawRectangleRounded((Rectangle){ 320, 385, 170, 180 }, 0.3, 6, lightBlue);
 
+    drawTGrid(grid);
     drawBlock(currentBlock, 11, 11);
 
     EndDrawing();
@@ -131,5 +167,14 @@ Block *getNextBlock()
         return retBlock;
     }
     initBlocks();
+    shuffle();
     return getNextBlock();
+}
+
+void endMove()
+{
+    lockBlock(currentBlock, grid);
+    destroyBlock(currentBlock);
+    currentBlock = nextBlock;
+    nextBlock = getNextBlock();
 }

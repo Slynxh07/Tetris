@@ -12,6 +12,7 @@ extern const Color bOrange;
 extern const Color bDarkBlue;
 extern const Color bBlue;
 extern const Color lightBlue;
+extern const Color gridColor;
 
 extern Color brickColors[8];
 
