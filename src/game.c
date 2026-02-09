@@ -5,6 +5,7 @@
 #include "block.h"
 #include <time.h>
 #include <stdio.h>
+#include "levels.h"
 
 #define HEIGHT 620
 #define WIDTH 500
@@ -24,6 +25,9 @@ int holding;
 double lastUpdateTime = 0;
 int score;
 int gameOver;
+int b2bTetris;
+int level;
+int totalLinesCleared;
 Font font;
 
 BLOCK_TYPE bag[BAG_SIZE];
@@ -67,6 +71,9 @@ void initGame()
     gameOver = 0;
     holding = 0;
     canHold = 1;
+    b2bTetris = 0;
+    level = 1;
+    totalLinesCleared = 0;
 }
 
 void runGame()
@@ -93,11 +100,12 @@ void updateGame()
 {
     keyPressed = GetKeyPressed();
     resetGhostBlockRow(ghostBlock, currentBlock);
-
+    level = calcCurrentLevel(totalLinesCleared);
+    double intervel = getIntervel(level);
     if (!gameOver)
     {
 
-        if (eventTriggered(0.4))
+        if (eventTriggered(intervel))
         {
             if (checkValidMove(currentBlock, DOWN, grid))
             {
@@ -144,7 +152,7 @@ void updateGame()
                 }
                 break; 
             case KEY_SPACE:
-                hardDrop(currentBlock, grid);
+                updateScore(0, hardDrop(currentBlock, grid) * 2);
                 endMove();
                 break;
             case KEY_C:
@@ -288,24 +296,37 @@ void endMove()
     nextBlock = getNextBlock();
     int rowsCleared = clearFullRows(grid);
     updateScore(rowsCleared, 0);
+    totalLinesCleared += rowsCleared;
     canHold = 1;
 }
 
 void updateScore(int linesCleared, int moveDownPoints)
 {
+    int multiplier = 1.5;
     switch (linesCleared)
     {
         case 1:
-            score += 100;
+            score += 100 * level;
+            b2bTetris = 0;
             break;
         case 2:
-            score += 300;
+            score += 300 * level;
+            b2bTetris = 0;
             break;
         case 3:
-            score += 500;
+            score += 500 * level;
+            b2bTetris = 0;
             break;
         case 4:
-            score += 1000;
+            if (b2bTetris)
+            {
+                score += (800 * level) * multiplier;
+            }
+            else
+            {
+                score += 800 * level;
+                b2bTetris = 1;
+            }
             break;
     }
     score += moveDownPoints;
@@ -329,6 +350,9 @@ void resetGame()
     holding = 0;
     canHold = 1;
     gameOver = 0;
+    b2bTetris = 0;
+    level = 1;
+    totalLinesCleared = 0;
 }
 
 void changeGhostBlock(BLOCK_TYPE t)

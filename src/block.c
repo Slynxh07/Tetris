@@ -152,12 +152,15 @@ void move(Block *b, Direction dir)
     }
 }
 
-void hardDrop(Block *b, Grid *g)
+int hardDrop(Block *b, Grid *g)
 {
+    int rowsDropped = 0;
     while (checkValidMove(b, DOWN, g))
     {
         move(b, DOWN);
+        rowsDropped++;
     }
+    return rowsDropped;
 }
 
 void resetGhostBlockRow(Block *targetB, Block *fromB)
