@@ -6,6 +6,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "levels.h"
+#include "sounds.h"
 
 #define HEIGHT 620
 #define WIDTH 500
@@ -29,7 +30,7 @@ int b2bTetris;
 int level;
 int totalLinesCleared;
 Font font;
-Sound music;
+Music music;
 
 BLOCK_TYPE bag[BAG_SIZE];
 
@@ -60,10 +61,12 @@ void initGame()
     InitWindow(WIDTH, HEIGHT, "Teris");
     InitAudioDevice();
     SetTargetFPS(60);
+    loadSounds();
     font = LoadFont("Assets/Font/monogram.ttf");
-    music = LoadSound("Assets/Sound/Music.wav");
-    SetSoundVolume(music, 0.5f);
-    PlaySound(music);
+    music = LoadMusicStream("Assets/Sound/Music.wav");
+    music.looping = true;
+    SetMusicVolume(music, 0.5f);
+    PlayMusicStream(music);
     srand(time(NULL));
     initBlocks();
     shuffle();
@@ -97,17 +100,15 @@ void closeGame()
     destroyBlock(currentBlock);
     destroyBlock(ghostBlock);
     destroyGrid(grid);
+    unloadSounds();
     UnloadFont(font);
-    UnloadSound(music);
+    UnloadMusicStream(music);
     CloseWindow();
 }
 
 void updateGame()
 {
-    if (!IsSoundPlaying(music))
-    {
-        PlaySound(music);
-    }
+    UpdateMusicStream(music);
 
     keyPressed = GetKeyPressed();
     resetGhostBlockRow(ghostBlock, currentBlock);
@@ -121,6 +122,7 @@ void updateGame()
             if (checkValidMove(currentBlock, DOWN, grid))
             {
                 move(currentBlock, DOWN);
+                PlaySound(movePieceS);
             }
             else 
             {
@@ -134,6 +136,7 @@ void updateGame()
                 if(checkValidRotation(currentBlock, grid))
                 {
                     rotate(currentBlock);
+                    PlaySound(rotatePieceS);
                     rotate(ghostBlock);
                 }
                 break;
@@ -141,6 +144,7 @@ void updateGame()
                 if (checkValidMove(currentBlock, DOWN, grid))
                 {
                     move(currentBlock, DOWN);
+                    PlaySound(movePieceS);
                     updateScore(0, 1);
                 }
                 else 
@@ -152,6 +156,7 @@ void updateGame()
                 if (checkValidMove(currentBlock, RIGHT, grid))
                 {
                     move(currentBlock, RIGHT);
+                    PlaySound(movePieceS);
                     move(ghostBlock, RIGHT);
                 }
                 break;
@@ -159,6 +164,7 @@ void updateGame()
                 if (checkValidMove(currentBlock, LEFT, grid))
                 {
                     move(currentBlock, LEFT);
+                    PlaySound(movePieceS);
                     move(ghostBlock, LEFT);
                 }
                 break; 
@@ -297,12 +303,14 @@ Block *getNextBlock()
 void endMove()
 {
     lockBlock(currentBlock, grid);
+    PlaySound(pieceLandedS);
     destroyBlock(currentBlock);
     currentBlock = nextBlock;
     changeGhostBlock(getBlockType(currentBlock));
     if (!checkValidMove(currentBlock, 0, grid))
     {
         gameOver = 1;
+        PlaySound(gameOverS);
     }
     nextBlock = getNextBlock();
     int rowsCleared = clearFullRows(grid);
@@ -319,14 +327,17 @@ void updateScore(int linesCleared, int moveDownPoints)
         case 1:
             score += 100 * level;
             b2bTetris = 0;
+            PlaySound(lineClearS);
             break;
         case 2:
             score += 300 * level;
             b2bTetris = 0;
+            PlaySound(lineClearS);
             break;
         case 3:
             score += 500 * level;
             b2bTetris = 0;
+            PlaySound(lineClearS);
             break;
         case 4:
             if (b2bTetris)
@@ -338,6 +349,7 @@ void updateScore(int linesCleared, int moveDownPoints)
                 score += 800 * level;
                 b2bTetris = 1;
             }
+            PlaySound(tetrisS);
             break;
     }
     score += moveDownPoints;
