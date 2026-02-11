@@ -20,7 +20,7 @@ Block *ghostBlock;
 
 Grid *grid;
 
-int keyPressed;
+int input;
 int canHold;
 int holding;
 double lastUpdateTime = 0;
@@ -110,7 +110,7 @@ void updateGame()
 {
     UpdateMusicStream(music);
 
-    keyPressed = GetKeyPressed();
+    input = handleInput();
     resetGhostBlockRow(ghostBlock, currentBlock);
     level = calcCurrentLevel(totalLinesCleared);
     double intervel = getIntervel(level);
@@ -130,7 +130,7 @@ void updateGame()
             }
         }
         
-        switch (keyPressed)
+        switch (input)
         {
             case KEY_UP:
                 if(checkValidRotation(currentBlock, grid))
@@ -181,7 +181,7 @@ void updateGame()
     }
     else 
     {
-        if (keyPressed == KEY_ENTER)
+        if (input == KEY_ENTER)
         {
             resetGame();
         }
@@ -382,4 +382,18 @@ void changeGhostBlock(BLOCK_TYPE t)
 {
     destroyBlock(ghostBlock);
     ghostBlock = createBlock(t);
+}
+
+int handleInput()
+{
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_UP) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_TRIGGER_1) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_TRIGGER_1)) return KEY_UP;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN)) return KEY_DOWN;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT)) return KEY_LEFT;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) return KEY_RIGHT;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_UP)) return KEY_C;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) || IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)) return KEY_SPACE;
+    if (IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)) return KEY_ENTER;
+
+    int keyPressed = GetKeyPressed();
+    return keyPressed;
 }
