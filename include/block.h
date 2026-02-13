@@ -29,6 +29,7 @@ typedef struct Position
 } Position;
 
 Block *createBlock(BLOCK_TYPE blockType);
+Block *cloneBlock(const Block *src);
 void destroyBlock(Block *b);
 BLOCK_TYPE getBlockType(const Block *b);
 int checkValidRotation(const Block *b, const Grid *g);

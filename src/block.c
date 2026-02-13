@@ -116,6 +116,15 @@ Block *createBlock(BLOCK_TYPE blockType)
     return b;
 }
 
+Block *cloneBlock(const Block *src)
+{
+    Block *b = malloc(sizeof(*b));
+    if (!b) return NULL;
+
+    memcpy(b, src, sizeof(*b));
+    return b;
+}
+
 BLOCK_TYPE getBlockType(const Block *b)
 {
     return b->blockType;

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "levels.h"
 #include "sounds.h"
+#include <string.h>
 
 #define HEIGHT 620
 #define WIDTH 500
@@ -44,6 +45,7 @@ void updateScore(int linesCleared, int moveDownPoints);
 Block *getNextBlock();
 void resetGame();
 void changeGhostBlock(BLOCK_TYPE t);
+int handleInput();
 
 int eventTriggered(double interval)
 {
@@ -112,7 +114,9 @@ void updateGame()
 
     input = handleInput();
     resetGhostBlockRow(ghostBlock, currentBlock);
+    int prevLevel = level;
     level = calcCurrentLevel(totalLinesCleared);
+    if (level < prevLevel) PlaySound(levelUpS);
     double intervel = getIntervel(level);
     if (!gameOver)
     {
@@ -396,4 +400,52 @@ int handleInput()
 
     int keyPressed = GetKeyPressed();
     return keyPressed;
+}
+
+typedef struct Move {
+    int colOffset, numRotations;
+    float score;
+} Move;
+
+Move findBestMove(Block *block, Grid *copyGrid, int rotation)
+{
+    
+}
+
+void aiPlay(BLOCK_TYPE bt, Grid *g)
+{
+    Grid *copy = malloc(sizeof(*g));
+    memcpy(copy, g, sizeof(copy));
+    Block *base = createBlock(bt);
+
+    Move bestMove = {0, 0, -1e9f};
+
+    for (int r = 0; r < 4; r++)
+    {
+        Block *b = cloneBlock(base);
+        for (int i = 0; i < r; i++) rotate(b);
+
+        Move m = findBestMove(b, copy, r);
+        if (m.score > bestMove.score) bestMove = m;
+
+        free(b);
+    }
+
+    for (int i = 0; i < bestMove.numRotations; i++)
+        rotate(currentBlock);
+
+    if (bestMove.colOffset > 0)
+    {
+        for (int i = 0; i < bestMove.colOffset; i++) move(currentBlock, RIGHT);
+    }
+    else
+    {
+        for (int i = 0; i < -bestMove.colOffset; i++) move(currentBlock, LEFT);
+    }
+
+    updateScore(0, hardDrop(currentBlock, g) * 2);
+    endMove();
+
+    free(base);
+    free(copy);
 }
