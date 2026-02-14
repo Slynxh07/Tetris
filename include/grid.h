@@ -16,5 +16,10 @@ int isCellEmpty(const Grid *g, const int row, const int col);
 int isCellOutside(const int row, const int col);
 void setCellValue(Grid *g, const int row, const int col, const int val);
 int clearFullRows(Grid *g);
+int countHoles(Grid *g);
+int getMaxHeight(Grid *g);
+int getBumpiness(Grid *g);
+int getAggHeight(Grid *g);
+int getWells(Grid *g);
 
 #endif

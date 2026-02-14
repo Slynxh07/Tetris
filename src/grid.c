@@ -104,5 +104,134 @@ void drawGrid(const Grid *g)
 
 void setCellValue(Grid *g, const int row, const int col, const int val)
 {
+    if (isCellOutside(row, col)) return;
     g->grid[row][col] = val;
+}
+
+int countHoles(Grid *g)
+{
+    int holes = 0;
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+        int blockFound = 0;
+
+        for (int row = 0; row < NUM_ROWS; row++)
+        {
+            if (g->grid[row][col])
+            {
+                blockFound = 1;
+            }
+            else if (blockFound)
+            {
+                holes++;
+            }
+        }
+    }
+
+    return holes;
+}
+
+int getMaxHeight(Grid *g)
+{
+    int maxHeight = 0;
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+        for (int row = 0; row < NUM_ROWS; row++)
+        {
+            if (g->grid[row][col])
+            {
+                int height = NUM_ROWS - row;
+                if (height > maxHeight) maxHeight = height;
+                break;
+            }
+        }
+    }
+
+    return maxHeight;
+}
+
+int getAggHeight(Grid *g)
+{
+    int sum = 0;
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+
+        int height = 0;
+
+        for (int row = 0; row < NUM_ROWS; row++)
+        {
+            if (g->grid[row][col])
+            {
+                height = NUM_ROWS - row;
+                break;
+            }
+        }
+
+        sum += height;
+    }
+
+    return sum;
+}
+
+int getBumpiness(Grid *g)
+{
+    int heights[NUM_COLS] = {0};
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+        for (int row = 0; row < NUM_ROWS; row++)
+        {
+            if (g->grid[row][col])
+            {
+                heights[col] = NUM_ROWS - row;
+                break;
+            }
+        }
+    }
+
+    int bumpiness = 0;
+    for (int col = 0; col < NUM_COLS - 1; col++)
+    {
+        int diff = heights[col] - heights[col + 1];
+        if (diff < 0) diff = -diff;
+        bumpiness += diff;
+    }
+
+    return bumpiness;
+}
+
+int getWells(Grid *g)
+{
+    int heights[NUM_COLS] = {0};
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+        for (int row = 0; row < NUM_ROWS; row++)
+        {
+            if (g->grid[row][col])
+            {
+                heights[col] = NUM_ROWS - row;
+                break;
+            }
+        }
+    }
+
+    int wells = 0;
+
+    for (int col = 0; col < NUM_COLS; col++)
+    {
+        int left = (col == 0) ? heights[col] + 1 : heights[col - 1];
+        int right = (col == NUM_COLS - 1) ? heights[col] + 1 : heights[col + 1];
+
+        if (left > heights[col] && right > heights[col])
+        {
+            int depth = (left < right ? left : right) - heights[col];
+            wells += depth;
+        }
+    }
+
+    return wells;
 }

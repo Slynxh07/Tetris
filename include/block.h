@@ -42,5 +42,7 @@ void drawBlock(const Block *b, int xOffset, int yOffset);
 void drawGhostBlock(const Block *b, int xOffset, int yOffset);
 void resetGhostBlockRow(Block *targetB, Block *fromB);
 void resetBlock(Block *b);
+void resetBlockY(Block *b);
+int getColOffset(const Block *b);
 
 #endif

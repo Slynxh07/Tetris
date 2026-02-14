@@ -289,3 +289,17 @@ void resetBlock(Block *b)
             break;
     }
 }
+
+void resetBlockY(Block *b)
+{
+    if (b->blockType == HERO && (b->rotateState == 1 || b->rotateState == 3)) 
+    {
+        b->rowOffset = -1;
+    }    
+    else b->rowOffset = 0;
+}
+
+int getColOffset(const Block *b) 
+{
+    return b->colOffset;
+}
